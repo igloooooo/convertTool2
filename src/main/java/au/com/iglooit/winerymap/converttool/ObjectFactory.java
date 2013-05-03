@@ -86,4 +86,14 @@ public class ObjectFactory {
         return new WineryInfoDetailsList();
     }
 
+    public WineryInfo createWineryInfo()
+    {
+        return new WineryInfo();
+    }
+
+    public WineryInfoList createWineryInfoList()
+    {
+        return new WineryInfoList();
+    }
+
 }
