@@ -11,9 +11,7 @@ import javax.ws.rs.core.MediaType;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
+import java.io.*;
 import java.util.List;
 
 /**
@@ -31,6 +29,7 @@ public class WineryMapConvertTool {
     private static final String OUT_PTAH = "C:\\playspace\\convertTool2\\output\\result.xml";
     private static final String WINERY_INFO_DETAILS_PTAH = "C:\\playspace\\convertTool2\\output\\winerydetails.xml";
     private static final String WINERY_INFO_PTAH = "C:\\playspace\\convertTool2\\output\\wineryinfo.xml";
+    private static final String WINERY_INFO_CSV_PTAH = "C:\\playspace\\convertTool2\\output\\wineryinfo.csv";
 
     private static final boolean parseRawData = false;
 
@@ -56,6 +55,8 @@ public class WineryMapConvertTool {
             exportWineryInfoDetailsXml(result);
             System.out.println("======= export wineryInfo xml =====");
             exportWineryInfoXml(result);
+            System.out.println("======= export wineryInfo csv =====");
+            generateCsvFile(WINERY_INFO_CSV_PTAH,result);
         } catch (JAXBException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         } catch (FileNotFoundException e) {
@@ -138,6 +139,39 @@ public class WineryMapConvertTool {
             wineryInfoDetails.setKeyValue(key);
         }
         return rawData;
+    }
+
+    private static void generateCsvFile(String sFileName, WineryInfoDetailsList list)
+    {
+        try
+        {
+            WineryInfoList infoList = new WineryInfoList(list);
+            FileWriter writer = new FileWriter(sFileName);
+            Integer i = 100;
+            for(WineryInfo info : infoList.getWineryInfoList())
+            {
+                writer.append(info.getName());
+                writer.append('|');
+                writer.append(info.getKeyValue());
+                writer.append('|');
+                writer.append(info.getLat());
+                writer.append('|');
+                writer.append(info.getLng());
+                writer.append('|');
+                writer.append(i.toString());
+                writer.append('\n');
+                i++;
+            }
+
+            //generate whatever data you want
+
+            writer.flush();
+            writer.close();
+        }
+        catch(IOException e)
+        {
+            e.printStackTrace();
+        }
     }
 
 }
